@@ -1,0 +1,26 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: candidate-dtg
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: candidate-ns
+spec:
+  releaseName: candidate-dtg
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-domain-genesis
+    git: https://github.com/devrehuman/blockchain-automation-framework.git
+    ref: master
+  values:
+    metadata:
+      name: candidate-dtg
+      namespace: candidate-ns
+    organization:
+      name: candidate
+    configmap:
+      domainGenesis: |-
+        {"reqSignature":{},"txn":{"data":{"alias":"rehuman-trustee","dest":"8N4tWjHARw76Zqu5SWnd6V","role":"0","verkey":"51mRzjSZ6TyTsJ3JWWdG1wjUwR68nPCEVgPCgEwhSZkS"},"metadata":{},"type":"1"},"txnMetadata":{"seqNo":1},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"alias":"recruiter-steward-1","dest":"NEnyjMZ8B3MuLU9c4KnkpP","role":"2","verkey":"CaNPzX2ej9k49xcWiuuhZdD1QKhBkNCzY1qRECjp3ShU"},"metadata":{"from":"8N4tWjHARw76Zqu5SWnd6V"},"type":"1"},"txnMetadata":{"seqNo":2},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"alias":"recruiter-steward-2","dest":"3ph7S5U2R3WtSiirwfVdik","role":"2","verkey":"2YDcZcF14M6LCwEMy98TWNFsCHHudNkdCAWZn2wFCZap"},"metadata":{"from":"8N4tWjHARw76Zqu5SWnd6V"},"type":"1"},"txnMetadata":{"seqNo":3},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"alias":"candidate-steward-1","dest":"Hr2M98FxrNbqvVzhatcWTD","role":"2","verkey":"ABWdZTUy9X5Rrzz164NBL9oitiD8ssWJVtN6YGwpE91d"},"metadata":{"from":"8N4tWjHARw76Zqu5SWnd6V"},"type":"1"},"txnMetadata":{"seqNo":4},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"alias":"candidate-steward-2","dest":"N8LRHPBRM2T49eXDrUTEv3","role":"2","verkey":"CWrFRtxDVRcQKkTJgWPFdrDcsLL2k3uaz1K3S5KZuCbG"},"metadata":{"from":"8N4tWjHARw76Zqu5SWnd6V"},"type":"1"},"txnMetadata":{"seqNo":5},"ver":"1"}
