@@ -32,8 +32,8 @@ spec:
       
       address: recruiter-endorser.indy.rehuman.com
       
-      ledger: http://rehuman-webserver.rehuman-ns.svc.cluster.local:15010
-      genesis: http://rehuman-webserver.rehuman-ns.svc.cluster.local/genesis
+      ledger: http://rehuman-webserver.rehuman-ns.svc.cluster.local:8000
+      genesis: http://rehuman-webserver.rehuman-ns.svc.cluster.local:8000/genesis
     vault:
       address: http://a60f9ef9306654131bf953d0d7ea362c-51415237.us-east-1.elb.amazonaws.com:8200
       serviceAccountName: recruiter-recruiter-endorser-vault-auth
