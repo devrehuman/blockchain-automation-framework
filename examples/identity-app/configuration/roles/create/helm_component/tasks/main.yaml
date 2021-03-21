@@ -34,7 +34,7 @@
     helmtemplate_type: "{{ type }}"
     charts:
       webserver: "webserver"
-      employer: "acme"
-      university: "faber"
+      candidate: "acme"
+      recruiter: "faber"
     chart_path: "{{ charts_dir }}"
     value_file: "{{ values_dir }}/{{ type }}/{{ component_name }}.yaml"
