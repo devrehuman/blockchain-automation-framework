@@ -1,4 +1,4 @@
 helm_templates:
   webserver: webserver.tpl
-  university: university.tpl
+  candidate: university.tpl
   recruiter: employer.tpl
