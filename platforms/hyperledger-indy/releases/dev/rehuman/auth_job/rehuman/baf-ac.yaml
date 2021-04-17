@@ -1,0 +1,36 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: rehuman-baf-ac-auth-job
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: rehuman-ns
+spec:
+  releaseName: rehuman-baf-ac-auth-job
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-auth-job
+    git: https://github.com/devrehuman/blockchain-automation-framework.git"
+    ref: master
+  values:
+    metadata:
+      name: rehuman-baf-ac-auth-job
+      namespace: rehuman-ns
+    network:
+      name: baf
+      kubernetes_url: https://380A1ED428E7A314C2CBF481CC481214.gr7.us-east-1.eks.amazonaws.com
+    image:
+      name: rehuman
+      repository: alpine:3.9.4
+    vault:
+      address: http://afb935f896b2b4869a4c52a7d3570e37-1293396774.us-east-1.elb.amazonaws.com:8200
+      keyPath: rehuman.baf-ac
+      identity: baf-ac
+      admin_auth_path: kubernetes-rehuman-admin-auth
+      policy: rehuman-baf-ac-ro
+      policy_content: path \"/rehuman/+/+/+/public*\" { capabilities = [ \"read\", \"list\" ] }
+      auth_path: kubernetes-rehuman-baf-ac-auth
+    account:
+      admin_service: rehuman-admin-vault-auth
+      admin_role: rw
+      service: rehuman-baf-ac-vault-auth
+      role: ro
