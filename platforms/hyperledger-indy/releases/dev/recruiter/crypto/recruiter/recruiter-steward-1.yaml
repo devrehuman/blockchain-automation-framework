@@ -1,0 +1,31 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: recruiter-recruiter-steward-1
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: recruiter-ns
+spec:
+  releaseName: recruiter-recruiter-steward-1
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-key-mgmt
+    git: https://github.com/devrehuman/blockchain-automation-framework.git
+    ref: master
+  values:
+    metadata:
+      name: recruiter-recruiter-steward-1
+      namespace: recruiter-ns
+    network:
+      name: baf
+    image:
+      name: recruiter
+      repository: index.docker.io/hyperledgerlabs/indy-key-mgmt:1.11.0
+      pullSecret: regcred
+    vault:
+      address: http://afb935f896b2b4869a4c52a7d3570e37-1293396774.us-east-1.elb.amazonaws.com:8200
+      keyPath: recruiter.stewards
+      identity: recruiter-steward-1
+      auth_path: kubernetes-recruiter-admin-auth
+    account:
+      service: recruiter-admin-vault-auth
+      role: rw
