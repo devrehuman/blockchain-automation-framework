@@ -1,0 +1,31 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: rehuman-rehuman-trustee
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: rehuman-ns
+spec:
+  releaseName: rehuman-rehuman-trustee
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-key-mgmt
+    git: https://github.com/devrehuman/blockchain-automation-framework.git
+    ref: master
+  values:
+    metadata:
+      name: rehuman-rehuman-trustee
+      namespace: rehuman-ns
+    network:
+      name: baf
+    image:
+      name: rehuman
+      repository: index.docker.io/hyperledgerlabs/indy-key-mgmt:1.11.0
+      pullSecret: regcred
+    vault:
+      address: http://afb935f896b2b4869a4c52a7d3570e37-1293396774.us-east-1.elb.amazonaws.com:8200
+      keyPath: rehuman.trustees
+      identity: rehuman-trustee
+      auth_path: kubernetes-rehuman-admin-auth
+    account:
+      service: rehuman-admin-vault-auth
+      role: rw
