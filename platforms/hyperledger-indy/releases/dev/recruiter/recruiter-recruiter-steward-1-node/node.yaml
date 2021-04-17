@@ -1,0 +1,103 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: recruiter-recruiter-steward-1-node
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: recruiter-ns
+spec:
+  releaseName: recruiter-recruiter-steward-1-node
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-node
+    git: https://github.com/devrehuman/blockchain-automation-framework.git
+    ref: master
+  values:
+    metadata:
+      name: recruiter-recruiter-steward-1-node
+      namespace: recruiter-ns
+    network:
+      name: baf
+    organization:
+      name: recruiter
+    genesis:
+      pool: Z2VuZXNpcy9wb29sX3RyYW5zYWN0aW9uc19nZW5lc2lz
+      domain: ZG9tYWluL2RvbWFpbl90cmFuc2FjdGlvbnNfZ2VuZXNpcw==
+      add_org: False
+    image:
+      pullSecret: regcred
+      initContainer:
+        name: recruiter-recruiter-steward-1-node-init
+        repository: alpine:3.9.4
+      cli:
+        name: recruiter-recruiter-steward-1-node-ledger-txn
+        repository: index.docker.io/hyperledgerlabs/indy-ledger-txn:latest
+        pullSecret: regcred  
+      indyNode:
+        name: recruiter-recruiter-steward-1-node
+        repository: index.docker.io/hyperledgerlabs/indy-node:1.11.0
+    node:
+      name: recruiter-steward-1
+      ip: 0.0.0.0
+      publicIp: 54.165.124.31
+      port: 9711
+      ambassadorPort: 9711
+    client:
+      publicIp: 54.165.124.31
+      ip: 0.0.0.0
+      port: 9712
+      ambassadorPort: 9712
+    service:
+      type: ClusterIP
+      ports:
+        nodePort: 9711
+        nodeTargetPort: 9711
+        clientPort: 9712
+        clientTargetPort: 9712
+    configmap:
+      indyConfig: |-
+        NETWORK_NAME = 'baf'
+        # Enable stdout logging
+        enableStdOutLogging = True
+        logRotationBackupCount = 10
+        # Directory to store ledger.
+        LEDGER_DIR = '/var/lib/indy/data'
+        # Directory to store logs.
+        LOG_DIR = '/var/log/indy'
+        # Directory to store keys.
+        KEYS_DIR = '/var/lib/indy/keys'
+        # Directory to store genesis transactions files.
+        GENESIS_DIR = '/var/lib/indy/genesis'
+        # Directory to store backups.
+        BACKUP_DIR = '/var/lib/indy/backup'
+        # Directory to store plugins.
+        PLUGINS_DIR = '/var/lib/indy/plugins'
+        # Directory to store node info.
+        NODE_INFO_DIR = '/var/lib/indy/data'
+    ambassador:
+      annotations: |-
+        ---
+        apiVersion: ambassador/v1
+        kind: TCPMapping
+        name: recruiter-recruiter-steward-1-node-node-mapping
+        port: 9711
+        service: recruiter-recruiter-steward-1-node.recruiter-ns:9711
+        ---
+        apiVersion: ambassador/v1
+        kind: TCPMapping
+        name: recruiter-recruiter-steward-1-node-client-mapping
+        port: 9712
+        service: recruiter-recruiter-steward-1-node.recruiter-ns:9712
+    vault:
+      address: http://afb935f896b2b4869a4c52a7d3570e37-1293396774.us-east-1.elb.amazonaws.com:8200
+      serviceAccountName: recruiter-recruiter-steward-1-vault-auth
+      keyPath: /keys/baf/keys/recruiter-steward-1
+      authPath: kubernetes-recruiter-recruiter-steward-1-auth
+      nodeId: recruiter-steward-1
+      role: ro
+    storage:
+      data:
+        storagesize: 3Gi
+        storageClassName: recruiter-aws-baremetal-storageclass
+      keys:
+        storagesize: 3Gi
+        storageClassName: recruiter-aws-baremetal-storageclass
