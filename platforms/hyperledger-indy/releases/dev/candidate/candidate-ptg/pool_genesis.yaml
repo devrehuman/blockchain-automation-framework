@@ -1,0 +1,25 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: candidate-ptg
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: candidate-ns
+spec:
+  releaseName: candidate-ptg
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-pool-genesis
+    git: https://github.com/devrehuman/blockchain-automation-framework.git
+    ref: master
+  values:
+    metadata:
+      name: candidate-ptg
+      namespace: candidate-ns
+    organization:
+      name: candidate
+    configmap:
+      poolGenesis: |-
+        {"reqSignature":{},"txn":{"data":{"data":{"alias":"recruiter-steward-1","blskey":"4RoyHuP75ZN22fqCDuvF9fUCRQiNnb29fCGmeFkLCgQWpC6sKHvTrGsJ1Kq4v1YTw7AokxdoSKfLVVDhnE4LyYg8GG9R1t5Rq3sF2Bj1qcEpdSC5a5zR3Bwqm7Q6uijoJ8DonCsNkZfexooBzA7rcYi6uFRasKe7KzwaNeWosqSFLUc","blskey_pop":"RTKUpvRwC7VhDtBXx31NGfdnrV9BgnfHrjCm5WBntY9jrvgXghsUXq2TKEsz5Fg3oZdWL1gRphi7jQPo38Dkwt64gH7MU9FXTQ1zrs3qxHFwF3syavCoVbM37bf2puHjaPim8o7Zotr3VZ4zx4Dd8dnnov2ALWUvi6rXz5dFgTMokj","client_ip":"54.165.124.31","client_port":9712,"node_ip":"54.165.124.31","node_port":9711,"services":["VALIDATOR"]},"dest":"BTmk9zxmGPY2Ddcd3cdYbGbXbQdEx7FVactLGB5VZGSX"},"metadata":{"from":"LCGpHppxvLLzsw5vsLLoJR"},"type":"0"},"txnMetadata":{"seqNo":1,"txnId":"b9a7e32a2f4087cbf22bb46c98fdf52563453008b993b5d9d3f12e24e085c2e4"},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"data":{"alias":"recruiter-steward-2","blskey":"amfMwjgAjSs3jyfjDsc8pQwxwCN2EbbLYhQvnHwNSzCvCtfPqWxQBwcYkMUuCKuzn1iPcA6XqCE7zrPvFaA1VBy9CX6rtvJW5pcydxLYVGxeeDCagtTRiCapVYHgN8x7gQgurhoHTe8YP8k6MuAuew9ax3xWk1MA1rv8YNvH94NSMs","blskey_pop":"R3jWur15My2beUMuixAeosbENSaqYnYoo6FuVYYxMLDnNp43mwsahTHEHttPnuNGydTkdgrCfqx7e73i7B5N9PNGpNq62412BsYmBKDzvSRvTkCQM4guTvDG6BGTmPVuPVWbmeXPNBnNhUkPVbjHmmHbmsahsKirGLXhEHZCwxQjjD","client_ip":"54.165.124.31","client_port":9722,"node_ip":"54.165.124.31","node_port":9721,"services":["VALIDATOR"]},"dest":"7w49aKan36eWJS6Wrtivr4Mn6Q2UmU1DoPEiHUknZhmE"},"metadata":{"from":"Difm1yiwgc7DGgr99Rgt1J"},"type":"0"},"txnMetadata":{"seqNo":2,"txnId":"06d7b520e95175c290ec348597de06b596a98a3e529671959eb3ceb40ff0ac41"},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"data":{"alias":"candidate-steward-1","blskey":"3ZXXZv51rXXPerfT5UCXDLKWg1VQ7zWV3zrV1h1ooCH6cLV7kuU5HYFGrtUsjKMkUcyzzMfSr7wSPKv84ZcYXJMVQKncEgfVvRv3GmZX7m6RV6MtNVshJ95fQ8EGnJHkhi8bmtF5Z5h69J68ai4QhvvYKj5yALZzxk8u85cf2yKrBPU","blskey_pop":"Qy4dEuoiKzP9QPC1d5YmVHr6iXLnTGLPZRNmhz4Eb6RcBELfhM2dKfxgtGREBjA6jY6oCYHiWqpVe5MJAsHWgZmQpVa1punGSYw9g8DoCFmKiEwTbq7H29LBZv9gGcxQcHqYTUmvrhVXjREkVRH6QPGhFPbULqzfYXWARMQVKuiKTm","client_ip":"54.165.124.31","client_port":9732,"node_ip":"54.165.124.31","node_port":9731,"services":["VALIDATOR"]},"dest":"CHZMvuhig4X9uC9m6fatLFPHrwAPDRW6G9F1fQg5mYAH"},"metadata":{"from":"Mhx2x51seXjkULYW7MJrA1"},"type":"0"},"txnMetadata":{"seqNo":3,"txnId":"353061b1e74845e7b3694cb6ccbc63ab259fe12b98a45b8cc1ad2fe9ab81472c"},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"data":{"alias":"candidate-steward-2","blskey":"3qgN1SZJQNgo5AZXidH9tX49caG7zFUAmpG9Aj7JJCY7iv48Km9v9N4NSj2aVk7sZNDWpmHNJ8jt2SSmncxMY2CRXgi7d1e3pFRCrSjCwu9vgtoDDB6rKXH6u9LddkD82FEVWxpQ4TU4w3rt4u2NJwzyf9jgScKqNy4i2Jkq46Fx5rA","blskey_pop":"RNdw9s28VuA4tHAGccDiUSskuiw6C2rNrRYexqXnHE7hjJV73i6e1GkpdZWWnS4ypwWHLDGeXU4CJqAdEA34zHWqXv9XaqzafbZ33wukWd2sd69AR4UqGhpnkNsHc4eLtC7qSVs8H6TH3npZYxMKjdPsi7eCuZ9Rb99Y6GXhD8cJvs","client_ip":"54.165.124.31","client_port":9742,"node_ip":"54.165.124.31","node_port":9741,"services":["VALIDATOR"]},"dest":"6TQadR7tJBrvn3zW5bysUBRhkrnGqhEU62JAwwKbTfKk"},"metadata":{"from":"B1XXNJyxgma2beqHZANbJQ"},"type":"0"},"txnMetadata":{"seqNo":4,"txnId":"b3dc11b902889fd4d1a9b214b8d12fdcd347e84f2a7b159d4745db34f6b62bb6"},"ver":"1"}
