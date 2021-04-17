@@ -7,8 +7,8 @@ FROM ubuntu:16.04
 # Create working directory
 WORKDIR /home/
 
-RUN apt-get update -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+RUN sudo apt-get update -y && \
+    DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
         curl \
         unzip \
         build-essential \
@@ -22,7 +22,7 @@ RUN apt-get update -y && \
         python3-dev \
         python3-pip && \
         pip3 install --no-cache --upgrade pip setuptools wheel && \
-    apt-get clean && \
+    sudo apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install ansible && \
