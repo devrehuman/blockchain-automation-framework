@@ -1,0 +1,36 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: candidate-candidate-steward-1-auth-job
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: candidate-ns
+spec:
+  releaseName: candidate-candidate-steward-1-auth-job
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-auth-job
+    git: https://github.com/devrehuman/blockchain-automation-framework.git
+    ref: master
+  values:
+    metadata:
+      name: candidate-candidate-steward-1-auth-job
+      namespace: candidate-ns
+    network:
+      name: demo
+      kubernetes_url: https://2EA72C02E4D0D555B15D7D55A5E70B18.gr7.us-east-1.eks.amazonaws.com
+    image:
+      name: candidate
+      repository: alpine:3.9.4
+    vault:
+      address: http://ab6b85dc5c22d4a5ca37f071617a15fa-2099287404.us-east-1.elb.amazonaws.com:8200
+      keyPath: candidate.stewards
+      identity: candidate-steward-1
+      admin_auth_path: kubernetes-candidate-admin-auth
+      policy: candidate-candidate-steward-1-ro
+      policy_content: path \"/candidate/stewards/candidate-steward-1/*\" { capabilities = [ \"read\", \"list\" ] }
+      auth_path: kubernetes-candidate-candidate-steward-1-auth
+    account:
+      admin_service: candidate-admin-vault-auth
+      admin_role: rw
+      service: candidate-candidate-steward-1-vault-auth
+      role: ro
