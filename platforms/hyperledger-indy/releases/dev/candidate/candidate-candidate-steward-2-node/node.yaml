@@ -1,0 +1,103 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: candidate-candidate-steward-2-node
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: candidate-ns
+spec:
+  releaseName: candidate-candidate-steward-2-node
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-node
+    git: https://github.com/devrehuman/blockchain-automation-framework.git
+    ref: master
+  values:
+    metadata:
+      name: candidate-candidate-steward-2-node
+      namespace: candidate-ns
+    network:
+      name: demo
+    organization:
+      name: candidate
+    genesis:
+      pool: Z2VuZXNpcy9wb29sX3RyYW5zYWN0aW9uc19nZW5lc2lz
+      domain: ZG9tYWluL2RvbWFpbl90cmFuc2FjdGlvbnNfZ2VuZXNpcw==
+      add_org: False
+    image:
+      pullSecret: regcred
+      initContainer:
+        name: candidate-candidate-steward-2-node-init
+        repository: alpine:3.9.4
+      cli:
+        name: candidate-candidate-steward-2-node-ledger-txn
+        repository: index.docker.io/hyperledgerlabs/indy-ledger-txn:latest
+        pullSecret: regcred  
+      indyNode:
+        name: candidate-candidate-steward-2-node
+        repository: index.docker.io/hyperledgerlabs/indy-node:1.11.0
+    node:
+      name: candidate-steward-2
+      ip: 0.0.0.0
+      publicIp: 44.198.231.88
+      port: 9741
+      ambassadorPort: 9741
+    client:
+      publicIp: 44.198.231.88
+      ip: 0.0.0.0
+      port: 9742
+      ambassadorPort: 9742
+    service:
+      type: ClusterIP
+      ports:
+        nodePort: 9741
+        nodeTargetPort: 9741
+        clientPort: 9742
+        clientTargetPort: 9742
+    configmap:
+      indyConfig: |-
+        NETWORK_NAME = 'demo'
+        # Enable stdout logging
+        enableStdOutLogging = True
+        logRotationBackupCount = 10
+        # Directory to store ledger.
+        LEDGER_DIR = '/var/lib/indy/data'
+        # Directory to store logs.
+        LOG_DIR = '/var/log/indy'
+        # Directory to store keys.
+        KEYS_DIR = '/var/lib/indy/keys'
+        # Directory to store genesis transactions files.
+        GENESIS_DIR = '/var/lib/indy/genesis'
+        # Directory to store backups.
+        BACKUP_DIR = '/var/lib/indy/backup'
+        # Directory to store plugins.
+        PLUGINS_DIR = '/var/lib/indy/plugins'
+        # Directory to store node info.
+        NODE_INFO_DIR = '/var/lib/indy/data'
+    ambassador:
+      annotations: |-
+        ---
+        apiVersion: ambassador/v1
+        kind: TCPMapping
+        name: candidate-candidate-steward-2-node-node-mapping
+        port: 9741
+        service: candidate-candidate-steward-2-node.candidate-ns:9741
+        ---
+        apiVersion: ambassador/v1
+        kind: TCPMapping
+        name: candidate-candidate-steward-2-node-client-mapping
+        port: 9742
+        service: candidate-candidate-steward-2-node.candidate-ns:9742
+    vault:
+      address: http://ab6b85dc5c22d4a5ca37f071617a15fa-2099287404.us-east-1.elb.amazonaws.com:8200
+      serviceAccountName: candidate-candidate-steward-2-vault-auth
+      keyPath: /keys/demo/keys/candidate-steward-2
+      authPath: kubernetes-candidate-candidate-steward-2-auth
+      nodeId: candidate-steward-2
+      role: ro
+    storage:
+      data:
+        storagesize: 3Gi
+        storageClassName: candidate-aws-baremetal-storageclass
+      keys:
+        storagesize: 3Gi
+        storageClassName: candidate-aws-baremetal-storageclass
