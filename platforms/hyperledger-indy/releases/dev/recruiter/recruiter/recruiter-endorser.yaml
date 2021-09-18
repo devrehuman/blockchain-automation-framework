@@ -1,0 +1,48 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: recruiter-endorser-acme
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: recruiter-ns
+spec:
+  releaseName: recruiter-endorser-acme
+  chart:
+    path: examples/identity-app/charts/acme
+    git: https://github.com/devrehuman/blockchain-automation-framework.git
+    ref: master
+  values:
+    metadata:
+      namespace: recruiter-ns
+      name: recruiter-endorser
+    organization:
+      name: recruiter
+    image:
+      pullSecret: regcred
+      init:
+        name: certs-init
+        repository: alpine:3.9.4
+      agent:
+        name: recruiter-endorser
+        repository: index.docker.io/sownak/aries-agents:1.11.0
+    service:
+      ports: 
+        service: 15023
+        endpoint: 15024
+      
+      address: recruiter-endorser.indy.rehuman.link
+      
+      ledger: http://rehuman-webserver.indy.rehuman.link:15010
+      genesis: http://rehuman-webserver.indy.rehuman.link:15010/genesis
+    vault:
+      address: http://ab6b85dc5c22d4a5ca37f071617a15fa-2099287404.us-east-1.elb.amazonaws.com:8200
+      serviceAccountName: recruiter-recruiter-endorser-vault-auth
+      authPath: kubernetes-recruiter-recruiter-endorser-auth
+      endorserName: recruiter-endorser
+      role: ro
+    storage:
+      size: 128Mi
+      className: recruiter-aws-baremetal-storageclass
+    proxy:
+      
+      provider: "ambassador"
