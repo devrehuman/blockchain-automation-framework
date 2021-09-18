@@ -1,0 +1,36 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: recruiter-baf-ac-auth-job
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: recruiter-ns
+spec:
+  releaseName: recruiter-baf-ac-auth-job
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-auth-job
+    git: https://github.com/devrehuman/blockchain-automation-framework.git
+    ref: master
+  values:
+    metadata:
+      name: recruiter-baf-ac-auth-job
+      namespace: recruiter-ns
+    network:
+      name: demo
+      kubernetes_url: https://2EA72C02E4D0D555B15D7D55A5E70B18.gr7.us-east-1.eks.amazonaws.com
+    image:
+      name: recruiter
+      repository: alpine:3.9.4
+    vault:
+      address: http://ab6b85dc5c22d4a5ca37f071617a15fa-2099287404.us-east-1.elb.amazonaws.com:8200
+      keyPath: recruiter.baf-ac
+      identity: baf-ac
+      admin_auth_path: kubernetes-recruiter-admin-auth
+      policy: recruiter-baf-ac-ro
+      policy_content: path \"/recruiter/+/+/+/public*\" { capabilities = [ \"read\", \"list\" ] }
+      auth_path: kubernetes-recruiter-baf-ac-auth
+    account:
+      admin_service: recruiter-admin-vault-auth
+      admin_role: rw
+      service: recruiter-baf-ac-vault-auth
+      role: ro
