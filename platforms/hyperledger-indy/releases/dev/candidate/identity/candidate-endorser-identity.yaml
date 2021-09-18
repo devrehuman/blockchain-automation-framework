@@ -1,0 +1,47 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: candidate-candidate-endorser-transaction
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: candidate-ns
+spec:
+  releaseName: candidate-candidate-endorser-transaction
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-ledger-txn
+    git: https://github.com/devrehuman/blockchain-automation-framework.git
+    ref: master
+  values:
+    metadata:
+      name: candidate-candidate-endorser-transaction
+      namespace: candidate-ns
+    network:
+      name: demo
+    genesis:
+      pool: Z2VuZXNpcy9wb29sX3RyYW5zYWN0aW9uc19nZW5lc2lz
+      domain: ZG9tYWluL2RvbWFpbl90cmFuc2FjdGlvbnNfZ2VuZXNpcw==
+      add_org: False
+    image:
+      cli:
+        name: candidate
+        repository: index.docker.io/hyperledgerlabs/indy-ledger-txn:latest
+        pullSecret: regcred
+    vault:
+      address: http://ab6b85dc5c22d4a5ca37f071617a15fa-2099287404.us-east-1.elb.amazonaws.com:8200
+      role: rw
+      serviceAccountName: candidate-admin-vault-auth
+      auth_path: kubernetes-candidate-admin-auth
+    organization:
+      name: candidate
+      adminIdentity:
+        name: rehuman-trustee
+        did: 6XUwvPv4gSdtehqdJ13vE2
+        path: rehuman/trustees
+      newIdentity:
+        name: candidate-endorser
+        role: ENDORSER
+        did: Xh9RLsDEQK5rpUauGBLVFo
+        verkey: HjEu6B8c5uqEgY4baAw4LNAxL1Q14WFjo7jJyL9gT7Dv
+        path: candidate/endorsers
+    node:
+      name: candidate
